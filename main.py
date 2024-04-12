@@ -1,7 +1,7 @@
 class CarFinder:
     def __init__(self):
         self.allowed_vehicle_list = ['Ford F-150', 'Chevrolet Silverado', 'Tesla \
-        CyberTruck', 'Toyota Tundra', 'Nissan Titan']
+        CyberTruck', 'Toyota Tundra', 'Nissan Titan', 'Rivian R1T', 'Ram 1500']
 
     def print_allowed_vehicles(self):
         print("The AutoCountry sales manager has allowed the following vehicles to be \
@@ -18,19 +18,32 @@ class CarFinder:
             in error please check the spelling and try again")
 
     def add_vehicle(self):
-        new_vehicle = input("Please Enter the full Vehicle name you would like to add:")
+        new_vehicle = input("Please Enter the full Vehicle name you would like to add: ")
         self.allowed_vehicle_list.append(new_vehicle)
         print(f'You have added "{new_vehicle}" as an authorized vehicle')
 
+    def delete_vehicle(self):
+        delete_input = input("Please Enter the full Vehicle name you would like to \
+        REMOVE: ")
+        if delete_input in self.allowed_vehicle_list:
+            confirm_delete = input(f'Are you sure you want to remove "{delete_input}" \
+            from the Authorized Vehicles List?\n').lower()
+            if confirm_delete == 'yes':
+                self.allowed_vehicle_list.remove(delete_input)
+                print(f'You have REMOVED "{delete_input}" as an authorized vehicle')
+        else:
+            print(f"{delete_input} is not found in the list of authorized vehicles.")
+
     def display_menu(self):
         print("********************************")
-        print("AutoCountry Vehicle Finder v0.3")
+        print("AutoCountry Vehicle Finder v0.4")
         print("********************************")
         print("Please Enter the following number below from the following menu:\n")
         print("1. PRINT all Authorized Vehicles")
         print("2. SEARCH for Authorized Vehicle")
         print("3. ADD Authorized Vehicle")
-        print("4. Exit")
+        print("4. DELETE Authorized Vehicle")
+        print("5. Exit")
 
     def run(self):
         while True:
@@ -44,6 +57,8 @@ class CarFinder:
             elif choice == '3':
                 self.add_vehicle()
             elif choice == '4':
+                self.delete_vehicle()
+            elif choice == '5':
                 print("Thank you for using the AutoCountry Vehicle Finder. Goodbye!")
                 break
             else:
