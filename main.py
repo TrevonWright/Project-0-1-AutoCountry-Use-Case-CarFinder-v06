@@ -1,11 +1,26 @@
 class CarFinder:
     def __init__(self):
-        self.allowed_vehicle_list = ['Ford F-150', 'Chevrolet Silverado', 'Tesla \
-        CyberTruck', 'Toyota Tundra', 'Nissan Titan', 'Rivian R1T', 'Ram 1500']
+        self.allowed_vehicle_file = "allowed_vehicles.txt"
+        self.load_vehicles()
+
+    def load_vehicles(self):
+        self.allowed_vehicle_list = ["Ford F-150",
+                                     "Chevrolet Silverado",
+                                     "Tesla CyberTruck"
+                                    "Toyota Tundra",
+                                     "Rivian R1T",
+                                     "Ram 1500"]
+        if os.path.exists(self.allowed_vehicle_file):
+            with open(self.allowed_vehicle_file, "r") as file:
+                self.allowed_vehicle_list = file.read().splitlines()
+
+    def save_vehicles(self):
+        with open(self.allowed_vehicle_file, "w") as file:
+            for vehicle in self.allowed_vehicle_list:
+                file.write(vehicle + "\n")
 
     def print_allowed_vehicles(self):
-        print("The AutoCountry sales manager has allowed the following vehicles to be \
-        sold:")
+        print("The AutoCountry sales manager has allowed these vehicles to be sold:")
         for vehicle in self.allowed_vehicle_list:
             print(vehicle)
 
@@ -14,13 +29,17 @@ class CarFinder:
         if search_input in self.allowed_vehicle_list:
             print(f"{search_input} is an authorized vehicle")
         else:
-            print(f"{search_input} is not an authorized vehicle, if you received this \
+            print(f"{search_input} is not an authorized vehicle, if you received this\
             in error please check the spelling and try again")
 
     def add_vehicle(self):
         new_vehicle = input("Please Enter the full Vehicle name you would like to add: ")
-        self.allowed_vehicle_list.append(new_vehicle)
-        print(f'You have added "{new_vehicle}" as an authorized vehicle')
+        if new_vehicle not in self.allowed_vehicle_list:
+            self.allowed_vehicle_list.append(new_vehicle)
+            self.save_vehicles()
+            print(f'You have added "{new_vehicle}" as an authorized vehicle')
+        else:
+            print(f'"{new_vehicle}" is already in the list of authorized vehicles')
 
     def delete_vehicle(self):
         delete_input = input("Please Enter the full Vehicle name you would like to \
@@ -30,13 +49,14 @@ class CarFinder:
             from the Authorized Vehicles List?\n').lower()
             if confirm_delete == 'yes':
                 self.allowed_vehicle_list.remove(delete_input)
+                self.save_vehicles()
                 print(f'You have REMOVED "{delete_input}" as an authorized vehicle')
         else:
             print(f"{delete_input} is not found in the list of authorized vehicles.")
 
     def display_menu(self):
         print("********************************")
-        print("AutoCountry Vehicle Finder v0.4")
+        print("AutoCountry Vehicle Finder v0.5")
         print("********************************")
         print("Please Enter the following number below from the following menu:\n")
         print("1. PRINT all Authorized Vehicles")
@@ -65,7 +85,9 @@ class CarFinder:
                 print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
+    import os
     finder = CarFinder()
     finder.run()
+
 
 
